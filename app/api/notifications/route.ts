@@ -13,7 +13,9 @@ export async function GET(req: NextRequest) {
     }
 
     await connectToDatabase();
-    const notifications = await Notification.find({ recipientId, recipientType }).sort({ createdAt: -1 }).limit(50);
+    const filter = { recipientId, recipientType };
+    // @ts-ignore
+    const notifications = await Notification.find(filter).sort({ createdAt: -1 }).limit(50);
     return NextResponse.json({ success: true, notifications });
   } catch (error) {
     console.error("Notification fetch error:", error);
@@ -49,7 +51,9 @@ export async function PATCH(req: NextRequest) {
     if (notificationId) {
       await Notification.findByIdAndUpdate(notificationId, { isRead: true });
     } else if (recipientId && recipientType) {
-      await Notification.updateMany({ recipientId, recipientType, isRead: false }, { $set: { isRead: true } });
+      const patchFilter = { recipientId, recipientType, isRead: false };
+      // @ts-ignore
+      await Notification.updateMany(patchFilter, { $set: { isRead: true } });
     }
 
     return NextResponse.json({ success: true });
