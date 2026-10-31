@@ -13,8 +13,7 @@ export async function GET(req: NextRequest) {
     }
 
     await connectToDatabase();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const notifications = await Notification.find({ recipientId, recipientType } as any).sort({ createdAt: -1 }).limit(50);
+    const notifications = await Notification.find({ recipientId, recipientType }).sort({ createdAt: -1 }).limit(50);
     return NextResponse.json({ success: true, notifications });
   } catch (error) {
     console.error("Notification fetch error:", error);

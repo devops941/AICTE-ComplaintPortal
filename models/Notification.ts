@@ -2,8 +2,8 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface INotification extends Document {
   recipientId: string;
-  recipientType: "student" | "officer" | "admin";
-  type: "welcome" | "complaint_submitted" | "status_changed" | "officer_update" | "complaint_assigned" | "new_complaint";
+  recipientType: string;
+  type: string;
   title: string;
   message: string;
   complaintId?: string;
