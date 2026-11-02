@@ -44,8 +44,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       fetchUnreadCount();
     }
 
+    const interval = setInterval(fetchUnreadCount, 30000);
     window.addEventListener("notifications-read", fetchUnreadCount);
-    return () => window.removeEventListener("notifications-read", fetchUnreadCount);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("notifications-read", fetchUnreadCount);
+    };
   }, [router]);
 
   const handleAdminLogout = () => {

@@ -50,6 +50,8 @@ export default function OfficerNotificationsPage() {
       const officer = JSON.parse(raw);
       setOfficerId(officer._id || "");
       fetchNotifications(officer._id || "");
+      const interval = setInterval(() => fetchNotifications(officer._id || ""), 30000);
+      return () => clearInterval(interval);
     } catch { router.push("/officer"); }
   }, [router, fetchNotifications]);
 

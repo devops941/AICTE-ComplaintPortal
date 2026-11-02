@@ -53,6 +53,8 @@ export default function StudentNotificationsPage() {
       const user = JSON.parse(raw);
       setEmail(user.email || "");
       fetchNotifications(user.email || "");
+      const interval = setInterval(() => fetchNotifications(user.email || ""), 30000);
+      return () => clearInterval(interval);
     } catch { router.push("/login"); }
   }, [router, fetchNotifications]);
 

@@ -29,10 +29,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   useEffect(() => {
     const raw = localStorage.getItem("complaint_user");
     if (!raw) { router.push("/login?redirect=/dashboard"); return; }
+    let interval: ReturnType<typeof setInterval>;
     try {
       const parsed = JSON.parse(raw);
       setUser(parsed);
-      if (parsed.email) fetchUnreadCount(parsed.email);
+      if (parsed.email) {
+        fetchUnreadCount(parsed.email);
+        interval = setInterval(() => fetchUnreadCount(parsed.email), 30000);
+      }
     } catch { router.push("/login?redirect=/dashboard"); }
 
     const handleNotifChange = () => {
@@ -41,7 +45,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       try { const u = JSON.parse(raw2); if (u.email) fetchUnreadCount(u.email); } catch { /* ignore */ }
     };
     window.addEventListener("notifications-read", handleNotifChange);
-    return () => window.removeEventListener("notifications-read", handleNotifChange);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("notifications-read", handleNotifChange);
+    };
   }, [router]);
 
   const handleSignOut = () => {

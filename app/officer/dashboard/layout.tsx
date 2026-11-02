@@ -37,11 +37,15 @@ export default function OfficerDashboardLayout({ children }: { children: React.R
   useEffect(() => {
     const session = localStorage.getItem("aicte_officer_session");
     if (!session) { router.push("/officer"); return; }
+    let interval: ReturnType<typeof setInterval>;
     try {
       const parsed = JSON.parse(session);
       setOfficer(parsed);
       setCheckingAuth(false);
-      if (parsed._id) fetchUnreadCount(parsed._id);
+      if (parsed._id) {
+        fetchUnreadCount(parsed._id);
+        interval = setInterval(() => fetchUnreadCount(parsed._id), 30000);
+      }
     } catch {
       router.push("/officer");
     }
@@ -52,7 +56,10 @@ export default function OfficerDashboardLayout({ children }: { children: React.R
       try { const o = JSON.parse(raw); if (o._id) fetchUnreadCount(o._id); } catch { /* ignore */ }
     };
     window.addEventListener("notifications-read", handleNotifChange);
-    return () => window.removeEventListener("notifications-read", handleNotifChange);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("notifications-read", handleNotifChange);
+    };
   }, [router]);
 
   const handleSignOut = () => {
