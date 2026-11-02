@@ -48,59 +48,6 @@ interface ComplaintDetail {
   officerRemarks?: string;
 }
 
-const DEMO_FALLBACKS: Record<string, ComplaintDetail> = {
-  "AICTE-2026-83937": {
-    complaintId: "AICTE-2026-83937",
-    complainantName: "Vasanthakumar G",
-    email: "vasanthakumar@gmail.com",
-    phone: "9876543210",
-    userCategory: "student",
-    institutionName: "National Institute of Technology, Trichy",
-    institutionState: "Tamil Nadu",
-    category: "Fee Irregularities & Withholding Refund",
-    subject: "Excess fee charged without receipt",
-    description: "College demanded supplementary lab fee of Rs 25,000 without receipt or AICTE council approval.",
-    reliefSought: "Immediate refund of excess fee collected and directive to college administration.",
-    images: ["/images/aicte-illustration.jpg", "/images/aicte-headquarters.jpg"],
-    status: "Pending",
-    priority: "Urgent",
-    createdAt: new Date().toISOString(),
-  },
-  "AICTE-2026-001": {
-    complaintId: "AICTE-2026-001",
-    complainantName: "Priya Sharma",
-    email: "priya.sharma@gmail.com",
-    phone: "9845123456",
-    userCategory: "student",
-    institutionName: "National Institute of Technology, Trichy",
-    institutionState: "Tamil Nadu",
-    category: "Fee Irregularities",
-    subject: "Extra fee collection",
-    description: "College demanded unapproved supplementary lab fee of ₹25,000 without receipt.",
-    reliefSought: "Immediate refund of excess fee collected.",
-    images: ["/images/aicte-illustration.jpg", "/images/aicte-headquarters.jpg"],
-    status: "Pending",
-    priority: "High",
-    createdAt: "2026-10-28T10:00:00Z",
-  },
-  "AICTE-2026-002": {
-    complaintId: "AICTE-2026-002",
-    complainantName: "Arun Verma",
-    email: "arun.verma@gmail.com",
-    phone: "9811223344",
-    userCategory: "student",
-    institutionName: "Delhi Technological University, Delhi",
-    institutionState: "Delhi (NCT)",
-    category: "Inadequate Infrastructure / Lab Facilities",
-    subject: "Hostel facility issue",
-    description: "Hostel block C has severe drinking water contamination and non-functional safety fire alarms.",
-    reliefSought: "Urgent health and safety inspection by AICTE regional office.",
-    images: ["/images/aicte-illustration.jpg", "/images/aicte-headquarters.jpg"],
-    status: "Under Review",
-    priority: "Normal",
-    createdAt: "2026-10-26T14:30:00Z",
-  },
-};
 
 export default function AdminComplaintDetailPage() {
   const params = useParams();
@@ -128,52 +75,15 @@ export default function AdminComplaintDetailPage() {
         const data = await res.json();
         if (data.success && data.complaint) {
           const c = data.complaint;
-          // Ensure evidentiary exhibits are always present
-          if (!c.images || c.images.length === 0) {
-            c.images = [
-              "/images/aicte-illustration.jpg",
-              "/images/aicte-headquarters.jpg",
-            ];
-          }
           setComplaint(c);
           setStatusVal(c.status || "Pending");
           setRemarks(c.adminRemarks || "");
           setSelectedOfficerId(c.assignedOfficerId || "");
-        } else if (DEMO_FALLBACKS[complaintId]) {
-          const fallback = DEMO_FALLBACKS[complaintId];
-          setComplaint(fallback);
-          setStatusVal(fallback.status);
-          setRemarks(fallback.adminRemarks || "");
         } else {
-          const generic: ComplaintDetail = {
-            complaintId,
-            complainantName: "Complainant Citizen",
-            email: "citizen@portal.in",
-            phone: "9876543210",
-            userCategory: "student",
-            institutionName: "Affiliated Technical Institution",
-            institutionState: "Delhi",
-            category: "General Complaint",
-            subject: "Registered complaint",
-            description: "Complaint record registered under official AICTE regulations.",
-            images: [
-              "/images/aicte-illustration.jpg",
-              "/images/aicte-headquarters.jpg",
-            ],
-            status: "Pending",
-            priority: "Normal",
-            createdAt: new Date().toISOString(),
-          };
-          setComplaint(generic);
-          setStatusVal(generic.status);
+          setComplaint(null);
         }
       } catch (e) {
         console.error(e);
-        if (DEMO_FALLBACKS[complaintId]) {
-          const fallback = DEMO_FALLBACKS[complaintId];
-          setComplaint(fallback);
-          setStatusVal(fallback.status);
-        }
       } finally {
         setIsLoading(false);
       }
@@ -325,7 +235,7 @@ export default function AdminComplaintDetailPage() {
       month: "long",
       year: "numeric",
     })
-    : "29 October 2026";
+    : "N/A";
 
   const formattedTime = complaint.createdAt
     ? new Date(complaint.createdAt).toLocaleTimeString("en-IN", {
@@ -333,7 +243,7 @@ export default function AdminComplaintDetailPage() {
       minute: "2-digit",
       hour12: true,
     })
-    : "04:30 PM";
+    : "N/A";
 
   return (
     <AdminLayout>

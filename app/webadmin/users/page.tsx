@@ -28,51 +28,10 @@ interface AdminComplaint {
   email: string;
 }
 
-const INITIAL_DEMO_USERS: AdminUser[] = [
-  {
-    _id: "u1",
-    fullName: "Vasanthakumar G",
-    email: "vasanthakumar@gmail.com",
-    phone: "9876543210",
-    userCategory: "student",
-    createdAt: "2026-10-15T08:00:00Z",
-  },
-  {
-    _id: "u2",
-    fullName: "Priya Sharma",
-    email: "priya.sharma@gmail.com",
-    phone: "9845123456",
-    userCategory: "student",
-    createdAt: "2026-10-18T11:30:00Z",
-  },
-  {
-    _id: "u3",
-    fullName: "Arun Verma",
-    email: "arun.verma@gmail.com",
-    phone: "9811223344",
-    userCategory: "student",
-    createdAt: "2026-10-20T09:10:00Z",
-  },
-  {
-    _id: "u4",
-    fullName: "Sneha Reddy",
-    email: "sneha.reddy@gmail.com",
-    phone: "9440112233",
-    userCategory: "student",
-    createdAt: "2026-10-22T14:40:00Z",
-  },
-  {
-    _id: "u5",
-    fullName: "Rajesh Kumar",
-    email: "rajesh.k@gmail.com",
-    phone: "9700334455",
-    userCategory: "faculty",
-    createdAt: "2026-10-24T16:20:00Z",
-  },
-];
+
 
 export default function WebAdminUsersPage() {
-  const [users, setUsers] = useState<AdminUser[]>(INITIAL_DEMO_USERS);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [complaints, setComplaints] = useState<AdminComplaint[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
